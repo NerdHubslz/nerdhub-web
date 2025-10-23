@@ -1,0 +1,56 @@
+{% extends "templates/base.html.twig" %}
+{% block title %}
+	Noticias 📰
+{% endblock %}
+
+{% block content %}
+
+	{# --- 1. NOTÍCIA EM DESTAQUE --- #}
+	{% if currentPage <= 1 %}
+		{# Adicionado 'mb-8' para 'margin-bottom: 2rem;' #}
+		<div class="noticias-destaque mb-8">
+			{% if noticias|length > 0 %}
+				{% set noticia_destaque = noticias[0] %}
+				{% include 'templates/partials/_card_noticia.html.twig' with { 'noticia': noticia_destaque, 'destaque': true } %}
+			{% endif %}
+		</div>
+	{% endif %}
+	{# Adicionado 'text-2xl', 'font-bold', 'mb-4', 'border-l-4', 'border-[#c4170c]', 'pl-2' #}
+	<h2 class="noticias-ultimas-titulo text-2xl font-bold mb-4 border-l-4 border-[#c4170c] pl-2">
+		Últimas notícias
+	</h2>
+
+	{# --- 2. GRELHA DE NOTÍCIAS (SEM O DESTAQUE) --- #}
+	{# Adicionado 'grid', 'grid-cols-1', 'sm:grid-cols-2', 'lg:grid-cols-3', 'gap-8', 'mb-8' #}
+	<div
+		class="noticias-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+		{# O filtro |slice(1) começa o loop a partir do SEGUNDO item para não repetir o destaque #}
+		{% if currentPage > 1 %}
+			{% for noticia in noticias %}
+				{% include 'templates/partials/_card_noticia.html.twig' with { 'noticia': noticia } %}
+			{% endfor %}
+		{% endif %}
+
+		{% for noticia in noticias|slice(1) %}
+			{% include 'templates/partials/_card_noticia.html.twig' with { 'noticia': noticia } %}
+		{% endfor %}
+
+	</div>
+
+	{# --- 3. PAGINAÇÃO (FORA DO LOOP) --- #}
+	{# Este bloco deve vir DEPOIS que o loop de notícias terminou #}
+	<div class="mt-10 flex justify-center">
+		<nav aria-label="Paginação">
+			<ul class="flex items-center -space-x-px h-10 text-base">
+				{% for page in pagination %}
+					<li>
+						<a href="?page={{ page.page }}" class="flex items-center justify-center px-4 h-10 leading-tight {{ page.current ? 'text-blue-600 border border-blue-300 bg-blue-50' : 'text-gray-500 bg-white border border-gray-300' }} hover:bg-gray-100 hover:text-gray-700">
+							{{ page.page }}
+						</a>
+					</li>
+				{% endfor %}
+			</ul>
+		</nav>
+	</div>
+
+{% endblock %}

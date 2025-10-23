@@ -1,0 +1,184 @@
+{% extends 'templates/admin/base.html.twig' %}
+
+{% block title %}
+	{{ page_title | default('Gerenciar Notícia') }}
+{% endblock %}
+
+{% block head %}
+	{{ parent() }}
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css"/>
+	<style>
+		/* Garante que a imagem no cropper não exceda o contêiner */
+		.img-container img {
+			display: block;
+			max-width: 100%;
+			max-height: 100%;
+		}
+	</style>
+{% endblock %}
+
+
+{% block content %}
+	<div class="container mx-auto p-6">
+		<h1 class="text-2xl font-bold mb-6">{{ title }}</h1>
+		{% if noticia.imagem() %}
+				<div class="mb-4">
+					<img src="{{public}}{{ noticia.imagem() }}" alt="Imagem da Notícia" class="mt-2 border rounded-md" style="max-height: 150px;">
+					
+				</div>
+			{% endif %}
+
+		<form action="{{ action }}" method="POST" enctype="multipart/form-data" id="noticiaForm">
+
+			<div class="mb-4">
+				<label for="titulo" class="block text-sm font-medium text-gray-700">Título</label>
+				<input type="text" name="titulo" id="titulo" value="{{ noticia.getTitulo() }}" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+			</div>
+
+			
+			
+
+			<div class="mb-4">
+				<label for="categoria_id" class="block text-sm font-medium text-gray-700">Categoria</label>
+				<select name="categoria_id" id="categoria_id" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+					{% for categoria in categorias %}
+						<option value="{{ categoria.getId() }}" {% if noticia.getIdCategoria() == categoria.getId() %} selected {% endif %}>
+							{{ categoria.getNome() }}
+						</option>
+					{% endfor %}
+				</select>
+			</div>
+
+			<div class="mb-6">
+				<label for="conteudo" class="block text-sm font-medium text-gray-700">Conteúdo</label>
+				<textarea name="conteudo" id="conteudo" rows="10" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">{{ noticia.getConteudo() }}</textarea>
+			</div>
+
+			<div class="mb-4 p-4 border-dashed border-2 rounded-lg">
+				<div id="uploadContainer">
+					<label for="imagemInput" class="block text-sm font-medium text-gray-700 mb-2">Imagem da Notícia</label>
+					<input type="file" id="imagemInput" name="imagemInput" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200">
+				</div>
+				
+
+				<div id="previewContainer" class="hidden mt-2">
+					<p class="text-sm font-medium text-gray-700">Prévia:</p>
+					<img id="imagePreview" class="mt-2 border rounded-md" style="max-height: 150px;">
+					<button type="button" id="removeImageBtn" class="mt-2 text-sm text-red-600 hover:underline">Remover</button>
+				</div>
+			</div>
+
+			<input type="hidden" name="image" id="croppedImageData">
+
+			<div class="flex justify-end mt-6">
+				<a href="{{ base_url }}/admin/noticias" class="mr-3 px-4 py-2 bg-gray-200 rounded-md">Cancelar</a>
+				<button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+					{{ button_label }}
+				</button>
+			</div>
+		</form>
+	</div>
+
+	<div id="cropModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
+		<div class="bg-white p-6 rounded-lg shadow-xl w-11/12 max-w-2xl">
+			<h3 class="text-xl font-bold mb-4">Adicionar Imagem</h3>
+			<div class="img-container h-96">
+				<img id="imageToCrop">
+			</div>
+			<div class="flex justify-end mt-4">
+				<button type="button" id="cancelCrop" class="mr-3 px-4 py-2 bg-gray-200 rounded-md">Cancelar</button>
+				<button type="button" id="confirmCrop" class="px-4 py-2 bg-green-600 text-white rounded-md">Confirmar</button>
+			</div>
+		</div>
+	</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+	{{ parent() }}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+    // Elementos do DOM
+    const imagemInput = document.getElementById('imagemInput');
+    const uploadContainer = document.getElementById('uploadContainer');
+    const modal = document.getElementById('cropModal');
+    const imageToCrop = document.getElementById('imageToCrop');
+    const confirmBtn = document.getElementById('confirmCrop');
+    const cancelBtn = document.getElementById('cancelCrop');
+    const croppedImageDataInput = document.getElementById('croppedImageData');
+    
+    // Novos elementos para a prévia
+    const previewContainer = document.getElementById('previewContainer');
+    const imagePreview = document.getElementById('imagePreview');
+    const removeImageBtn = document.getElementById('removeImageBtn');
+
+    let cropper;
+
+    // Quando o usuário seleciona uma imagem no input
+    imagemInput.addEventListener('change', (e) => {
+        const files = e.target.files;
+        if (files && files.length > 0) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                imageToCrop.src = reader.result;
+                modal.classList.remove('hidden');
+                
+                if (cropper) {
+                   cropper.destroy();
+                }
+
+                cropper = new Cropper(imageToCrop, {
+                    aspectRatio: 16 / 9,
+                    viewMode: 1,
+                    background: false,
+                });
+            };
+            reader.readAsDataURL(files[0]);
+        }
+    });
+
+    // Quando o usuário confirma o corte
+    confirmBtn.addEventListener('click', () => {
+        if (cropper) {
+            const base64Canvas = cropper.getCroppedCanvas({
+                width: 1280,
+                height: 720,
+            }).toDataURL('image/png');
+            
+            // Coloca os dados no campo oculto
+            croppedImageDataInput.value = base64Canvas;
+            
+            // ATUALIZAÇÃO DA UI: Mostra a prévia
+            imagePreview.src = base64Canvas;
+            previewContainer.classList.remove('hidden');
+            
+            // Esconde o input de arquivo original
+            uploadContainer.classList.add('hidden');
+            
+            // Fecha o modal
+            modal.classList.add('hidden');
+            if (cropper) cropper.destroy();
+        }
+    });
+
+    // Quando o usuário cancela o corte
+    cancelBtn.addEventListener('click', () => {
+        modal.classList.add('hidden');
+        imagemInput.value = ''; 
+        if(cropper) cropper.destroy();
+    });
+
+    // NOVO: Quando o usuário clica em "Trocar imagem"
+    removeImageBtn.addEventListener('click', () => {
+        // Limpa os dados e reseta a UI para o estado inicial
+        croppedImageDataInput.value = '';
+        imagemInput.value = '';
+        previewContainer.classList.add('hidden');
+        uploadContainer.classList.remove('hidden');
+    });
+});
+	</script>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'templates/base.html.twig' %}
+
+{% block title %}{{ noticia.titulo }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="text-center mt-5 mb-5 text-4xl font-bold ">{{ noticia.titulo }}</h1>
+        
+        <img src="{{noticia.imagem}}" class="img-fluid mb-" alt="{{ noticia.titulo }} imagem">
+        <img src="{{public}}/{{ noticia.imagem }}" alt="{{ noticia.titulo }}" class="img-fluid mb-5">
+        <p class="text-center mb-5">{{ noticia.autor }}</p>
+        <p class="text-center mb-5">{{ noticia.resumo }}</p>
+        <hr>
+        <p>{{ noticia.conteudo }}</p>
+    </div>
+{% endblock %}

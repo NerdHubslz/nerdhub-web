@@ -1,0 +1,10 @@
+{% extends "templates/base.html.twig" %}
+{% block title %}Pagina não encotrada {% endblock %}
+
+{% block content %}
+<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 60vh;">
+    <span style="font-size: 5rem;">😥</span>
+    <h1 style="font-weight: bold; text-align: center;">{{code}} - {{message}}</h1>
+</div>
+
+{% endblock %}

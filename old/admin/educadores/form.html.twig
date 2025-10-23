@@ -1,0 +1,214 @@
+{# src/Views/admin/educadores/form.html.twig #}
+
+{% extends 'templates/admin/base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+    {# Adiciona o CSS do Cropper.js #}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css"/>
+    <style>
+        .img-container img {
+            display: block;
+            max-width: 100%;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold text-gray-800">{{ title }}</h2>
+    <a href="{{ base_url }}/admin/educadores" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 text-lg">
+        &larr; Voltar para a Lista
+    </a>
+</div>
+
+<div class="bg-white shadow-md rounded-lg p-6 lg:p-8">
+    <form action="{{ action }}" method="POST" enctype="multipart/form-data" id="educadorForm">
+        
+        {# Dados do Usuário #}
+        <fieldset class="border rounded-md p-4 mb-6">
+            <legend class="text-lg font-semibold px-2">Dados de Acesso</legend>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700">Nome de Usuário <span class="text-red-500">*</span></label>
+                    <input type="text" name="username" id="username" value="{{ educador.usuario.username }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" required>
+                </div>
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">E-mail <span class="text-red-500">*</span></label>
+                    <input type="email" name="email" id="email" value="{{ educador.usuario.email }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" required>
+                </div>
+                <div>
+                    <label for="senha" class="block text-sm font-medium text-gray-700">Senha</label>
+                    <input type="password" name="senha" id="senha" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="{{ educador.usuario.id ? 'Deixe em branco para não alterar' : 'Mínimo de 6 caracteres' }}">
+                </div>
+                 <div>
+                    <label for="is_admin" class="flex items-center mt-6">
+                        <input type="checkbox" name="is_admin" id="is_admin" value="1" class="h-4 w-4 text-blue-600 border-gray-300 rounded" {{ educador.usuario.isAdmin ? 'checked' : '' }}>
+                        <span class="ml-2 text-sm text-gray-700">Tornar Administrador?</span>
+                    </label>
+                </div>
+            </div>
+        </fieldset>
+        
+        {# Dados do Perfil #}
+        <fieldset class="border rounded-md p-4 mb-6">
+            <legend class="text-lg font-semibold px-2">Informações do Perfil</legend>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
+                <div>
+                    <label for="nome" class="block text-sm font-medium text-gray-700">Nome<span class="text-red-500">*</span></label>
+                    <input type="text" name="nome" id="nome" value="{{ educador.perfil.nome }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" required>
+                </div>
+                <div>
+                    <label for="sobrenome" class="block text-sm font-medium text-gray-700">Sobrenome</label>
+                    <input type="text" name="sobrenome" id="sobrenome" value="{{ educador.perfil.sobrenome }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                </div>
+                 <div>
+                    <label for="cargo" class="block text-sm font-medium text-gray-700">Cargo</label>
+                    <input type="text" name="cargo" id="cargo" value="{{ educador.perfil.cargo }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" placeholder="Ex: Coordenador(a), Professor(a)">
+                </div>
+            </div>
+            <div class="mt-6">
+                <label for="bio" class="block text-sm font-medium text-gray-700">Biografia</label>
+                <textarea name="bio" id="bio" rows="4" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">{{ educador.perfil.bio }}</textarea>
+            </div>
+            
+            {# ===== ÁREA DE UPLOAD DA IMAGEM (AGORA COM CROPPER) ===== #}
+            <div class="mt-6 p-4 border-dashed border-2 rounded-lg">
+                <div id="uploadContainer">
+                    <label for="imagemInput" class="block text-sm font-medium text-gray-700 mb-2">Foto do Perfil</label>
+                    <input type="file" id="imagemInput" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200">
+                     
+                </div>
+                <div id="previewContainer" class="hidden mt-2">
+                    <p class="text-sm font-medium text-gray-700">Prévia:</p>
+                    <img id="imagePreview" class="mt-2 border rounded-md" style="max-height: 150px;">
+                    <button type="button" id="removeImageBtn" class="mt-2 text-sm text-red-600 hover:underline">Remover Imagem</button>
+                </div>
+            </div>
+             {# Campo oculto que guardará a imagem cortada #}
+            <input type="hidden" name="cropped_image_data" id="croppedImageData">
+            {# ========================================================== #}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                 <div>
+                    <label for="github" class="block text-sm font-medium text-gray-700">GitHub URL</label>
+                    <input type="url" name="github" id="github" value="{{ educador.perfil.github }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                </div>
+                <div>
+                    <label for="linkedin" class="block text-sm font-medium text-gray-700">LinkedIn URL</label>
+                    <input type="url" name="linkedin" id="linkedin" value="{{ educador.perfil.linkedin }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                </div>
+            </div>
+        </fieldset>
+
+        <div class="flex justify-end mt-8">
+            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                {{ button_label }}
+            </button>
+        </div>
+    </form>
+</div>
+
+{# ===== MODAL PARA CORTAR A IMAGEM ===== #}
+<div id="cropModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg shadow-xl w-11/12 max-w-2xl">
+        <h3 class="text-xl font-bold mb-4">Ajustar Imagem do Perfil</h3>
+        <div class="img-container h-96">
+            <img id="imageToCrop">
+        </div>
+        <div class="flex justify-end mt-4">
+            <button type="button" id="cancelCrop" class="mr-3 px-4 py-2 bg-gray-200 rounded-md">Cancelar</button>
+            <button type="button" id="confirmCrop" class="px-4 py-2 bg-green-600 text-white rounded-md">Confirmar</button>
+        </div>
+    </div>
+</div>
+{# ======================================= #}
+{% endblock %}
+
+{# ===== BLOCO DE SCRIPTS ===== #}
+{% block scripts %}
+    {{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const imagemInput = document.getElementById('imagemInput');
+        const uploadContainer = document.getElementById('uploadContainer');
+        const modal = document.getElementById('cropModal');
+        const imageToCrop = document.getElementById('imageToCrop');
+        const confirmBtn = document.getElementById('confirmCrop');
+        const cancelBtn = document.getElementById('cancelCrop');
+        const croppedImageDataInput = document.getElementById('croppedImageData');
+        
+        const previewContainer = document.getElementById('previewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+        const removeImageBtn = document.getElementById('removeImageBtn');
+
+        let cropper;
+
+        imagemInput.addEventListener('change', (e) => {
+            const files = e.target.files;
+            if (files && files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    imageToCrop.src = reader.result;
+                    modal.classList.remove('hidden');
+                    
+                    if (cropper) {
+                       cropper.destroy();
+                    }
+
+                    // Para perfis, uma proporção de 1:1 (quadrado) é melhor
+                    cropper = new Cropper(imageToCrop, {
+                        aspectRatio: 1 / 1,
+                        viewMode: 1,
+                        background: false,
+                    });
+                };
+                reader.readAsDataURL(files[0]);
+            }
+        });
+
+        confirmBtn.addEventListener('click', () => {
+            if (cropper) {
+                const base64Canvas = cropper.getCroppedCanvas({
+                    width: 400,  // Tamanho bom para foto de perfil
+                    height: 400,
+                }).toDataURL('image/png');
+                
+                croppedImageDataInput.value = base64Canvas;
+                
+                imagePreview.src = base64Canvas;
+                previewContainer.classList.remove('hidden');
+                uploadContainer.classList.add('hidden');
+                
+                modal.classList.add('hidden');
+                if (cropper) cropper.destroy();
+            }
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            modal.classList.add('hidden');
+            imagemInput.value = ''; 
+            if(cropper) cropper.destroy();
+        });
+
+        removeImageBtn.addEventListener('click', () => {
+            croppedImageDataInput.value = '';
+            imagemInput.value = '';
+            previewContainer.classList.add('hidden');
+            uploadContainer.classList.remove('hidden');
+        });
+
+        // Se já existir uma foto, mostra a prévia ao carregar a página
+        {% if educador.perfil.foto %}
+            imagePreview.src = "{{ base_url }}/public/{{ educador.perfil.foto }}";
+            previewContainer.classList.remove('hidden');
+            uploadContainer.classList.add('hidden');
+        {% endif %}
+    });
+    </script>
+{% endblock %}

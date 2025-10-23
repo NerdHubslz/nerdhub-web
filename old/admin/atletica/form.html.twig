@@ -1,0 +1,235 @@
+{# src/Views/admin/atletica/form.html.twig #}
+
+{% extends 'templates/admin/base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block head %}
+    {{ parent() }}
+    {# Adiciona o CSS do Cropper.js #}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css"/>
+    <style>
+        /* Estilos para o Cropper.js (copiados do educadores/form.html.twig) */
+        .img-container img {
+            display: block;
+            max-width: 100%;
+        }
+        /* Estilos adicionais para o modal, se necessário */
+        #atleticaCropModal {
+            /* Certifique-se de que o modal está escondido por padrão e é flex para centralizar */
+            display: none; /* Ou use a classe 'hidden' do Tailwind se configurada */
+            position: fixed;
+            inset: 0;
+            background-color: rgba(128, 128, 128, 0.75); /* Fundo semi-transparente */
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+        }
+        #atleticaCropModal > div {
+            /* Estilo do container do modal */
+            background-color: white;
+            padding: 1.5rem; /* p-6 */
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* shadow-xl */
+            width: 91.666667%; /* w-11/12 */
+            max-width: 48rem; /* max-w-2xl */
+        }
+        .atletica-img-container {
+            height: 24rem; /* h-96 */
+            overflow: hidden; /* Importante para o Cropper */
+            margin-bottom: 1rem;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold text-gray-800">{{ title }}</h2>
+    <a href="{{ base_url }}/admin/atletica" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 text-lg">
+        &larr; Voltar para a Lista
+    </a>
+</div>
+
+<div class="bg-white shadow-md rounded-lg p-6 lg:p-8">
+    <form action="{{ action }}" method="POST" enctype="multipart/form-data" id="atleticaForm">
+        {# Campos existentes do formulário para nome, cargo, instagram_url etc. #}
+        {# Exemplo: #}
+        <div>
+            <label for="nome" class="block text-sm font-medium text-gray-700">Nome <span class="text-red-500">*</span></label>
+            <input type="text" name="nome" id="nome" value="{{ membro.nome }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" required>
+        </div>
+        <div>
+            <label for="cargo" class="block text-sm font-medium text-gray-700">Cargo <span class="text-red-500">*</span></label>
+            <input type="text" name="cargo" id="cargo" value="{{ membro.cargo }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" required>
+        </div>
+        <div>
+            <label for="instagram_url" class="block text-sm font-medium text-gray-700">Instagram URL</label>
+            <input type="url" name="instagram_url" id="instagram_url" value="{{ membro.instagram_url }}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+        </div>
+
+        {# ===== ÁREA DE UPLOAD DA IMAGEM COM CROPPER ===== #}
+        <div class="mt-6 p-4 border-dashed border-2 rounded-lg">
+            <div id="atleticaUploadContainer">
+                <label for="atleticaImagemInput" class="block text-sm font-medium text-gray-700 mb-2">Foto do Membro</label>
+                <input type="file" id="atleticaImagemInput" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200">
+            </div>
+            <div id="atleticaPreviewContainer" class="{% if not membro.foto %}hidden{% endif %} mt-2"> {# Esconde se não houver foto #}
+                <p class="text-sm font-medium text-gray-700">Prévia:</p>
+                {# Aqui você usa o 'public' global do Twig para montar o caminho da imagem corretamente #}
+                <img id="atleticaImagePreview" class="mt-2 border rounded-md" style="max-height: 150px;" {% if membro.foto %}src="{{ public }}{{ membro.foto }}"{% endif %}>
+                <button type="button" id="atleticaRemoveImageBtn" class="mt-2 text-sm text-red-600 hover:underline">Remover Imagem</button>
+            </div>
+
+            {# NOVO E CORRETO LOCAL PARA O CHECKBOX DE REMOÇÃO #}
+            {% if membro.foto %}
+                <div class="mt-2">
+                    <label class="flex items-center">
+                        <input type="checkbox" name="remove_current_image" value="1" id="atleticaRemoveCurrentImageCheckbox" class="h-4 w-4 text-red-600 border-gray-300 rounded">
+                        <span class="ml-2 text-sm text-gray-700">Remover foto atual?</span>
+                    </label>
+                </div>
+            {% endif %}
+        </div>
+        {# Campo oculto que guardará a imagem cortada #}
+        {# É crucial que o 'name' deste input seja 'image' para ser compatível com ImageUploader::upload($data, ...) #}
+        <input type="hidden" name="cropped_image_data" id="atleticaCroppedImageData">
+        {# ========================================================== #}
+
+        <div class="flex justify-end mt-8">
+            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                {{ button_label }}
+            </button>
+        </div>
+    </form>
+</div>
+
+{# ===== MODAL PARA CORTAR A IMAGEM ===== #}
+<div id="atleticaCropModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg shadow-xl w-11/12 max-w-2xl">
+        <h3 class="text-xl font-bold mb-4">Ajustar Imagem do Membro</h3>
+        <div class="atletica-img-container h-96">
+            <img id="atleticaImageToCrop">
+        </div>
+        <div class="flex justify-end mt-4">
+            <button type="button" id="atleticaCancelCrop" class="mr-3 px-4 py-2 bg-gray-200 rounded-md">Cancelar</button>
+            <button type="button" id="atleticaConfirmCrop" class="px-4 py-2 bg-green-600 text-white rounded-md">Confirmar</button>
+        </div>
+    </div>
+</div>
+{# ======================================= #}
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Renomeie os IDs para serem específicos da atlética para evitar conflitos futuros
+        const imagemInput = document.getElementById('atleticaImagemInput');
+        const uploadContainer = document.getElementById('atleticaUploadContainer');
+        const modal = document.getElementById('atleticaCropModal');
+        const imageToCrop = document.getElementById('atleticaImageToCrop');
+        const confirmBtn = document.getElementById('atleticaConfirmCrop');
+        const cancelBtn = document.getElementById('atleticaCancelCrop');
+        const croppedImageDataInput = document.getElementById('atleticaCroppedImageData');
+        
+        const previewContainer = document.getElementById('atleticaPreviewContainer');
+        const imagePreview = document.getElementById('atleticaImagePreview');
+        const removeImageBtn = document.getElementById('atleticaRemoveImageBtn');
+
+        let cropper;
+
+        imagemInput.addEventListener('change', (e) => {
+            const files = e.target.files;
+            if (files && files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    imageToCrop.src = reader.result;
+                    modal.style.display = 'flex'; // Use style.display para mostrar/esconder o modal
+                    
+                    if (cropper) {
+                       cropper.destroy();
+                    }
+
+                    // Para perfis, uma proporção de 1:1 (quadrado) é melhor
+                    cropper = new Cropper(imageToCrop, {
+                        aspectRatio: 1 / 1,
+                        viewMode: 1,
+                        background: false,
+                    });
+                };
+                reader.readAsDataURL(files[0]);
+            }
+            // E resetar ao selecionar nova imagem para evitar conflito
+            const removeCurrentImageHidden = document.getElementById('atleticaRemoveCurrentImageCheckbox');
+            if (removeCurrentImageHidden) {
+                removeCurrentImageHidden.checked = false; // Desmarcar ao selecionar nova imagem
+            }
+        });
+
+        confirmBtn.addEventListener('click', () => {
+            if (cropper) {
+                const base64Canvas = cropper.getCroppedCanvas({
+                    width: 400,  // Tamanho ideal para foto de perfil da atlética
+                    height: 400,
+                    fillColor: '#fff', // Cor de preenchimento para áreas transparentes
+                }).toDataURL('image/png'); // Pode ser 'image/jpeg' se preferir JPG
+
+                croppedImageDataInput.value = base64Canvas;
+                
+                imagePreview.src = base64Canvas;
+                previewContainer.classList.remove('hidden');
+                uploadContainer.classList.add('hidden');
+                
+                modal.style.display = 'none'; // Esconde o modal
+                if (cropper) cropper.destroy();
+            }
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            modal.style.display = 'none'; // Esconde o modal
+            imagemInput.value = ''; // Limpa o input de arquivo para permitir upload da mesma imagem novamente
+            if(cropper) cropper.destroy();
+            // Ao cancelar, também podemos querer garantir que a opção de remover imagem seja redefinida se o usuário não escolheu uma nova imagem
+            const removeCurrentImageHidden = document.getElementById('atleticaRemoveCurrentImageCheckbox');
+            if (removeCurrentImageHidden) {
+                // Se o usuário cancelou e não havia imagem prévia cortada no campo hidden,
+                // e a imagem existente estava sendo exibida, a checkbox de remover deve permanecer como está ou ser redefinida dependendo do fluxo desejado.
+                // Aqui, vamos garantir que ela não seja marcada sem querer.
+                // Se o campo hidden de croppedImageDataInput não tiver valor, significa que nenhuma nova imagem foi confirmada.
+                if (!croppedImageDataInput.value && imagePreview.src === "{{ public }}{{ membro.foto }}") {
+                    // Se a prévia é a imagem original e não há cropped data, não altere o checkbox de remover
+                    // Ou redefina para false se o fluxo padrão é desmarcar ao cancelar upload de nova imagem
+                    // removeCurrentImageHidden.checked = false; // Descomente se for o caso
+                }
+            }
+        });
+
+        removeImageBtn.addEventListener('click', () => {
+            const removeCurrentImageHidden = document.getElementById('atleticaRemoveCurrentImageCheckbox');
+            if (removeCurrentImageHidden) {
+                removeCurrentImageHidden.checked = true; // Marca o checkbox para informar ao backend
+            }
+            croppedImageDataInput.value = ''; // Limpa o Base64 da nova imagem
+            imagemInput.value = ''; // Limpa o input de arquivo
+            imagePreview.src = ''; // Limpa a prévia
+            previewContainer.classList.add('hidden');
+            uploadContainer.classList.remove('hidden');
+        });
+
+        // Lógica para exibir a foto existente ao carregar a página (modo de edição)
+        // A variável 'membro' é passada pelo AdminAtleticaController
+        {% if membro.foto %}
+            imagePreview.src = "{{ public }}{{ membro.foto }}"; // Use 'public' para o caminho completo
+            previewContainer.classList.remove('hidden');
+            uploadContainer.classList.add('hidden');
+            // Certifica-se de que o checkbox de remover não está marcado por padrão ao carregar
+            const removeCurrentImageHidden = document.getElementById('atleticaRemoveCurrentImageCheckbox');
+            if (removeCurrentImageHidden) {
+                removeCurrentImageHidden.checked = false;
+            }
+        {% endif %}
+    });
+    </script>
+{% endblock %}

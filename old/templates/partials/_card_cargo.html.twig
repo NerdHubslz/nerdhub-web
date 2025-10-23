@@ -1,0 +1,36 @@
+<div class="max-w-5xl mx-auto bg-white border rounded-md border-[#d9d9d9] p-6 mt-3 shadow-md items-center gap-6  transform  transition-all duration-700 ease-in-out">
+	<div class="flex flex-col md:flex-row items-center gap-6">
+		<div class="flex-shrink-0">
+			<img src="{{card['img']}}" class="w-[180px] h-[180px] rounded-full object-cover object-top overflow-hidden shadow-xl"/>
+		</div>
+		<div class="max-md:text-center md:flex-1">
+			<h1 class="text-xl font-semibold">{{card['nome']}}</h1>
+			<p class="italic mb-4">{{card['cargo']}}</p>
+			<p class="mb-2 md:max-w-3xl">{{card['descricao']}}</p>
+		</div>
+	</div>
+{% if card.redes is defined and card.redes is not empty %}
+<div class="flex justify-center md:justify-start gap-4 mt-4">
+	{% if card.redes.instagram is not empty and card.redes.instagram is defined %}
+		<a href="{{ card.redes.instagram }}" target="_blank" rel="noopener" aria-label="Instagram" class="text-gray-500 hover:text-pink-600 text-2xl">
+			<i class="fab fa-instagram"></i>
+		</a>
+	{% endif %}
+	{% if card.redes.x is not empty and card.redes.x is defined %}
+		<a href="{{ card.redes.x }}" target="_blank" rel="noopener" aria-label="X (Twitter)" class="text-gray-500 hover:text-blue-500 text-2xl">
+			<i class="fab fa-x-twitter"></i>
+		</a>
+	{% endif %}
+	{% if card.redes.linkedin is not empty and card.redes.linkedin is defined %}
+		<a href="{{ card.redes.linkedin }}" target="_blank" rel="noopener" aria-label="LinkedIn" class="text-gray-500 hover:text-blue-700 text-2xl">
+			<i class="fab fa-linkedin"></i>
+		</a>
+	{% endif %}
+	{% if card.redes.github is not empty and card.redes.github is defined %}
+		<a href="{{ card.redes.github }}" target="_blank" rel="noopener" aria-label="GitHub" class="text-gray-500 hover:text-black text-2xl">
+			<i class="fab fa-github"></i>
+		</a>
+	{% endif %}
+</div>
+{% endif %}
+</div>

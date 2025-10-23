@@ -1,0 +1,65 @@
+{% if config['bg'] %}
+	{% set bg = config['bg'] %}
+{% else %}
+	{% set bg = '#001A35' %}
+{% endif %}
+
+{% if config['text_color'] %}
+	{% set text_color = config['text_color'] %}
+{% else %}
+	{% set text_color = 'white' %}
+{% endif %}
+
+{% if config['hover_color'] %}
+	{% set hover_color = config['hover_color'] %}
+{% else %}
+	{% set hover_color = '#003f6b' %}
+{% endif %}
+
+{% if config['logo'] %}
+	{% set logo = config['logo'] %}
+{% else %}
+	{% set logo = 'logo.png' %}
+{% endif %}
+
+
+
+<header class="bg-[{{bg}}] text-[{{text_color}}]">
+	<nav class="flex justify-between items-center w-[95%] m-auto">
+		<div>
+			<a href={{base_url}}><img class="w-16 p-1" src="{{base_url}}/{{assets}}/img/logos/{{logo}}" alt="Logo"></a>
+		</div>
+		<div class="nav-links duration-500 z-10 md:static absolute bg-[{{bg}}] md:min-h-fit min-h-[20vh] left-0 top-[-100%] md:w-auto w-full flex items-center px-5">
+			<ul class="flex md:flex-row flex-col md:items-center md:gap-[6vw] gap-6 text-white text-lg p-4">
+				{% for key, link in links %}
+					<li>
+						<a class="hover:text-xl hover:underline duration-300" href={{link}}>{{key}}</a>
+					</li>
+				{% endfor %}
+
+			</ul>
+		</div>
+		<div class="flex items-center gap-6">
+
+			{% if user != null %}
+				<div class="relative group">
+					<button class="text-lg text-white px-5 py-2 rounded-3xl duration-300 ease-out focus:outline-none flex items-center">
+						Olá
+						{{ user.name }}
+						<svg class="ml-2 w-4 h-4 fill-current" viewbox="0 0 20 20"><path d="M5.25 7.5L10 12.25L14.75 7.5H5.25Z"/></svg>
+					</button>
+					<div class="absolute right-0 mt-2 w-40 bg-[{{bg}}] rounded-md shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto transition-opacity z-20">
+
+						<a href="{{base_url}}/perfil" class="block px-4 py-2 text-gray-800 hover:bg-{{hover_color}} text-white">Ver Perfil</a>
+						<a href="{{base_url}}/logout" class="block px-4 py-2 text-gray-800 hover:bg-{{hover_color}} text-white">Logout</a>
+					</div>
+				</div>
+			{% endif %}
+
+
+			<ion-icon onclick="onToggleMenu(this)" name="menu" class="text-3xl text-white cursor-pointer md:hidden"></ion-icon>
+		</div>
+	</nav>
+
+	<script src="{{ assets }}js/navbar.js"></script>
+</header>

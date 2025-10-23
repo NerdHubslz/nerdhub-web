@@ -1,0 +1,12 @@
+
+{% include 'templates/partials/_head.html.twig' with {'title': block('title')} %}
+<body class="min-h-screen flex flex-col font-['Pixelify_Sans'] bg-[#F5F4F4]">
+    {% include 'templates/partials/_navbar.html.twig' with {'config': config} %}
+        <main class="container mx-auto py-10 grow">
+    {% block content %}
+    {% endblock %}
+    </main>
+
+    {% include 'templates/partials/_footer.html.twig' with {'config': config} %}
+</body>
+</html>

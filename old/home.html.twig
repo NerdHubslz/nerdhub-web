@@ -1,0 +1,159 @@
+{% set info_card = [
+	{
+		'title': 'Conheça os Educadores',
+		'text': 'Veja quem são os professores e mentores do curso.',
+		'link': base_url ~ '/educadores',
+		'color': '#1AFEAB',
+		'text_color': '#001A35',
+		'hover_color': '#003f6b'
+	},
+	{
+		'title': 'Conheça o LTD',
+		'text': 'Descubra o Laboratório de Tecnologia e Desenvolvimento.',
+		'link': base_url ~ '/ltd',
+		'color': '#00538A',
+		'text_color': 'white',
+		'hover_color': '#003f6b'
+	},
+	{
+		'title': 'Conheça a Atlética',
+		'text': 'Saiba mais sobre a Atlética e suas atividades.',
+		'link': base_url ~ '/atletica',
+		'color': '#001A35',
+		'text_color': 'white',
+		'hover_color': '#003f6b'
+	},
+	{
+		'title': 'PodPink',
+		'text': 'Conheça o podcast que valoriza e amplia a visibilidade feminina no mercado de TI!',
+		'link': base_url ~ '/podpink',
+		'color': '#EC4899',
+		'text_color': 'white',
+		'hover_color': '#DB2777'
+	}
+] %}
+
+
+
+{% extends "templates/base.html.twig" %}
+
+
+{% block title %}
+	Home
+{% endblock %}
+{% block content %}
+	<!-- banner -->
+	<section class="flex justify-center mb-10">
+		<img src="{{assets}}/img/banner.png" alt="Banner Principal" class="size-[65%] object-cover "/>
+	</section>
+
+	<!-- Sobre o nerdhub -->
+	<section class="bg-[#00538A] w-screen relative left-[50%] right-[50%] ml-[-50vw] mr-[-50vw] rounded-none shadow-lg p-6 sm:p-8 md:p-10 mb-10">
+		<h2 class="text-3xl sm:text-4xl font-bold mb-4 text-center underline text-white">
+			Sobre o NerdHub
+		</h2>
+
+		<p class="text-white mb-8 text-base sm:text-lg max-w-5xl mx-auto text-center font-[Poppins]">
+			O
+			<strong>Nerdhub</strong>
+			é um portal desenvolvido por alunos e para alunos do curso de
+			<strong>Ciência da Computação da Estácio São Luís</strong>. Aqui, você encontra informações, notícias, eventos, conteúdos e tudo o que precisa para se manter conectado com o universo da tecnologia, da programação e do seu curso.
+		</p>
+
+		<!-- Grid 2x2 -->
+		<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto">
+			<div class="bg-white rounded-lg p-4 sm:p-6 shadow-md">
+				<h3 class="text-xl sm:text-2xl font-bold mb-2 text-[#00538A]">Missão</h3>
+				<p class="text-gray-700 text-sm sm:text-base">
+					Levar informação, conectar estudantes e promover o desenvolvimento acadêmico e profissional na área de tecnologia.
+				</p>
+			</div>
+
+			<div class="bg-white rounded-lg p-4 sm:p-6 shadow-md">
+				<h3 class="text-xl sm:text-2xl font-bold mb-2 text-[#00538A]">Visão</h3>
+				<p class="text-gray-700 text-sm sm:text-base">
+					Tornar-se a principal plataforma de apoio e informação para estudantes de tecnologia da região.
+				</p>
+			</div>
+
+			<div class="bg-white rounded-lg p-4 sm:p-6 shadow-md">
+				<h3 class="text-xl sm:text-2xl font-bold mb-2 text-[#00538A]">Valores</h3>
+				<p class="text-gray-700 text-sm sm:text-base">
+					Colaboração, aprendizado contínuo, paixão por tecnologia e comprometimento com a comunidade acadêmica.
+				</p>
+			</div>
+
+			<div class="bg-white rounded-lg p-4 sm:p-6 shadow-md">
+				<h3 class="text-xl sm:text-2xl font-bold mb-2 text-[#00538A]">Objetivo</h3>
+				<p class="text-gray-700 text-sm sm:text-base">
+					Ser um hub de conhecimento, facilitando o acesso a conteúdos relevantes e oportunidades para estudantes.
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- Notícias -->
+	<section>
+		<h1 class="text-[2.5rem] font-extralight max-sm:text-3xl max-md:text-3xl max-sm:text-center underline text-center mb-10">Noticias</h1>
+
+		<!-- Notícia Principal -->
+		<article class="bg-white rounded-lg shadow-lg overflow-hidden mb-12 hover:shadow-2xl transition-shadow flex flex-col md:flex-row">
+			<img src="https://source.unsplash.com/800x450/?breaking-news" alt="Notícia Principal" class="w-full md:w-1/2 h-128 md:h-auto object-cover"/>
+			<div class="p-6 flex flex-col justify-center md:w-1/2">
+				<h3 class="text-3xl font-extrabold mb-4">Notícia Principal: Título Impactante</h3>
+				<p class="text-gray-700 mb-6">
+					Um resumo mais detalhado da notícia principal para atrair a atenção do leitor e destacar o conteúdo mais importante.:
+				</p>
+			</div>
+		</article>
+
+		<!-- Noticias menores -->
+		<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+
+			<article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow">
+				<img src="https://source.unsplash.com/400x250/?news" alt="Notícia 1" class="w-full h-48 object-cover"/>
+				<div class="p-4">
+					<h3 class="text-xl font-bold mb-2">Título da Notícia 1</h3>
+					<p class="text-gray-600">Resumo curto da notícia para dar uma ideia do conteúdo e despertar o interesse do leitor.</p>
+					<a href="#" class="text-blue-600 hover:underline mt-3 inline-block">Leia mais</a>
+				</div>
+			</article>
+
+			<article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow">
+				<img src="https://source.unsplash.com/400x250/?technology" alt="Notícia 2" class="w-full h-48 object-cover"/>
+				<div class="p-4">
+					<h3 class="text-xl font-bold mb-2">Título da Notícia 2</h3>
+					<p class="text-gray-600">Um resumo interessante e breve para a notícia de tecnologia que está em alta.</p>
+					<a href="#" class="text-blue-600 hover:underline mt-3 inline-block">Leia mais</a>
+				</div>
+			</article>
+
+			<article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow">
+				<img src="https://source.unsplash.com/400x250/?sports" alt="Notícia 3" class="w-full h-48 object-cover"/>
+				<div class="p-4">
+					<h3 class="text-xl font-bold mb-2">Título da Notícia 3</h3>
+					<p class="text-gray-600">Resumo da notícia esportiva que está chamando a atenção dos fãs ao redor do mundo.</p>
+					<a href="#" class="text-blue-600 hover:underline mt-3 inline-block">Leia mais</a>
+				</div>
+			</article>
+		</div>
+	</section>
+
+	<section class="my-12">
+		<div class="grid gap-4 md:grid-cols-4 sm:grid-cols-2">
+			{% for card in info_card %}
+			{% include "templates/partials/_info_card.html.twig" with {
+				'title': card.title,
+				'text': card.text,
+				'link': card.link,
+				'color': card.color,
+				'text_color': card.text_color,
+				'hover_color': card.hover_color
+			}  %}
+				
+			{% endfor %}
+		</div>
+	</section>
+
+
+</section>{% endblock %}

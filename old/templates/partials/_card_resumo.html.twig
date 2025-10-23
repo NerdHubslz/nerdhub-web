@@ -1,0 +1,47 @@
+{% if config['bg'] %}
+    {% set bg = config['bg'] %}
+{% else %}
+    {% set bg = '#FFFFFF' %}
+{% endif %}
+
+{% if config['text_color'] %}
+    {% set text_color = config['text_color'] %}
+{% else %}
+    {% set text_color = '#000000' %}
+{% endif %}
+
+{% if config['border_color'] %}
+    {% set border_color = config['border_color'] %}
+{% else %}
+    {% set border_color = '#E5E7EB' %}
+{% endif %}
+
+{% if config['hover_color'] %}
+    {% set hover_color = config['hover_color'] %}
+{% else %}
+    {% set hover_color = '#F9FAFB' %}
+{% endif %}
+
+{% if config['title_color'] %}
+    {% set title_color = config['title_color'] %}
+{% else %}
+    {% set title_color = '#111827' %}
+{% endif %}
+
+{% if config['description_color'] %}
+    {% set description_color = config['description_color'] %}
+{% else %}
+    {% set description_color = '#FFFFF' %}
+{% endif %}
+
+
+<article class=" max-w-5xl mx-auto bg-[{{bg}}] flex flex-col md:flex-row items-center gap-6 max-w-5xl bg-[{{bg}}] border border-[{{border_color}}] rounded-xl shadow-lg p-6 mt-10 transition-all duration-300">
+
+        <img class="w-60 rounded-lg object-cover object-top" src="{{card['img']}}" alt="{{card['title']}}">
+        
+        <div class="flex flex-col gap-3 text-center md:text-left">
+            <h3 class="text-2xl font-bold text-[{{title_color}}]">{{card['title']}}</h3>
+            <p class="text-[{{description_color}}] text-base">{{card['description']}}</p>
+        </div>
+
+</article>

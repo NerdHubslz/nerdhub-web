@@ -1,0 +1,19 @@
+<div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition duration-300">
+                <img src="{{public}}/{{ noticia.imagem }}" alt="Imagem da Notícia 1" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h2 class="font-bold text-xl mb-2 text-gray-800">{{noticia.titulo}}</h2>
+                    <p class="text-gray-700 text-base mb-4 font-[Poppins]">
+                        {{ noticia.conteudo|slice(0, 255) ~ (noticia.conteudo|length > 255 ? '...' : '') }}
+                    </p>
+
+                    <div class="flex items-center justify-between mb-4">
+                        <!-- <p class="bg-blue-500 rounded-full transition duration-300 py-2 px-4 text-white font-bold">Esporte</p> -->
+                        <p class="text-green-600 text-xl transition duration-300 font-bold ">{{categoria}}</p>
+                    
+                        <a href="{{base_url}}/noticia/{{noticia.slug}}" class=" text-[{{noticia.categoria.cor}}] hover:text-blue-700 hover:underline font-bold transition duration-300">
+                            Leia Mais &rarr;
+                        </a>
+                    </div>
+                    
+                </div>
+            </div>

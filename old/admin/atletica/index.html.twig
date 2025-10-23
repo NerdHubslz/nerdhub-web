@@ -1,0 +1,231 @@
+{% extends "templates/admin/base.html.twig" %}
+
+{% block title %}Gerenciar Atlética{% endblock %}
+
+{% block content %}
+    {# Cabeçalho da Seção #}
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-800 font-['Pixelify_Sans']">Gerenciar Membros da Atlética</h1>
+        <button id="addMemberBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-lg transition-colors">
+            + Adicionar Membro
+        </button>
+    </div>
+
+    {# Exibe mensagem flash (de sucesso ou erro) #}
+    {% if flash %}
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-md" role="alert">
+            <p>{{ flash }}</p>
+        </div>
+    {% endif %}
+
+    {# Tabela de Membros #}
+    <div class="bg-white shadow-md rounded-lg overflow-x-auto">
+        <table class="w-full text-left">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th class="p-4">Foto</th>
+                    <th class="p-4">Nome</th>
+                    <th class="p-4">Cargo</th>
+                    <th class="p-4">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if membros is not empty %}
+                    {% for membro in membros %}
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="p-4">
+                                <img src="{{ membro.getFoto() ? (public ~ membro.getFoto()) : 'https://placehold.co/60x60/E2E8F0/4A5568?text=Sem+Foto' }}" 
+                                     alt="Foto de {{ membro.getNome() }}" 
+                                     class="w-12 h-12 rounded-full object-cover"
+                                     onerror="this.onerror=null;this.src='https://placehold.co/60x60/E2E8F0/4A5568?text=Sem+Foto';">
+                            </td>
+                            <td class="p-4 font-medium text-gray-700">{{ membro.getNome() }}</td>
+                            <td class="p-4 text-gray-600">{{ membro.getCargo() }}</td>
+                            <td class="p-4 flex space-x-2">
+                                <button class="edit-btn bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"
+                                        data-id="{{ membro.getId() }}"
+                                        data-nome="{{ membro.getNome() }}"
+                                        data-cargo="{{ membro.getCargo() }}"
+                                        data-instagram-url="{{ membro.getInstagramUrl() }}"
+                                        data-foto="{{ membro.getFoto() ? (public ~ membro.getFoto()) : '' }}">
+                                    Editar
+                                </button>
+                                <form action="{{ base_url }}/admin/atletica/delete/{{ membro.getId() }}" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar este membro?');">
+                                    <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                                        Deletar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center p-6 text-gray-500">Nenhum membro encontrado.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <div id="memberModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-75 z-50 flex items-center justify-center transition-opacity duration-300 ease-out opacity-0">
+        <div id="modalPanel" class="relative mx-auto p-6 border w-full max-w-lg shadow-xl rounded-md bg-white transform transition-all duration-300 ease-out scale-95 opacity-0">
+            <div class="flex justify-between items-center pb-3 border-b">
+                <h3 id="modalTitle" class="text-2xl leading-6 font-bold text-gray-900 font-['Pixelify_Sans']">Adicionar Novo Membro</h3>
+                <button id="closeModalBtn" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="mt-4">
+                <form id="memberForm" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="id" id="memberId">
+                    
+                    <div class="mb-4">
+                        <label for="imagem" class="block text-sm font-medium text-gray-700">Foto do Membro</label>
+                        <input type="file" name="imagem" id="imagem" accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200 cursor-pointer"/>
+                        
+                        <div id="currentImageContainer" class="mt-3 hidden">
+                             <p class="text-sm text-gray-600 mb-1">Imagem atual:</p>
+                             <img id="currentImage" src="" alt="Imagem Atual" class="w-24 h-24 object-cover rounded-md border"/>
+                             <div class="mt-2">
+                                <input type="checkbox" name="remove_current_image" value="1" id="remove_current_image" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                                <label for="remove_current_image" class="ml-2 text-sm text-gray-900">Remover imagem atual</label>
+                             </div>
+                        </div>
+                        
+                        <div id="imagePreviewContainer" class="mt-3 hidden">
+                            <img id="imagePreview" src="#" alt="Prévia da nova imagem" class="max-h-48 w-auto rounded-md border border-gray-300 shadow-sm"/>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label for="nome" class="block text-sm font-medium text-gray-700">Nome</label>
+                            <input type="text" name="nome" id="nome" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" required>
+                        </div>
+                        <div>
+                            <label for="cargo" class="block text-sm font-medium text-gray-700">Cargo</label>
+                            <input type="text" name="cargo" id="cargo" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm" required>
+                        </div>
+                        <div>
+                            <label for="instagram_url" class="block text-sm font-medium text-gray-700">Link do Instagram</label>
+                            <input type="url" name="instagram_url" id="instagram_url" placeholder="https://instagram.com/usuario" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end items-center pt-6 mt-4 border-t">
+                        <button id="cancelModalBtn" type="button" class="mr-3 px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancelar</button>
+                        <button id="saveBtn" type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('memberModal');
+    const modalPanel = document.getElementById('modalPanel');
+    const addBtn = document.getElementById('addMemberBtn');
+    const closeBtn = document.getElementById('closeModalBtn');
+    const cancelBtn = document.getElementById('cancelModalBtn');
+    const editBtns = document.querySelectorAll('.edit-btn');
+    const form = document.getElementById('memberForm');
+    const modalTitle = document.getElementById('modalTitle');
+    
+    // Form elements
+    const memberIdInput = document.getElementById('memberId');
+    const nomeInput = document.getElementById('nome');
+    const cargoInput = document.getElementById('cargo');
+    const instagramInput = document.getElementById('instagram_url');
+    
+    // Image elements
+    const imageInput = document.getElementById('imagem');
+    const imagePreview = document.getElementById('imagePreview');
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+    const currentImage = document.getElementById('currentImage');
+    const currentImageContainer = document.getElementById('currentImageContainer');
+
+    const openModal = () => {
+        modal.classList.remove('hidden');
+        requestAnimationFrame(() => {
+            modalPanel.classList.remove('scale-95', 'opacity-0');
+            modal.classList.remove('opacity-0');
+        });
+    };
+
+    const closeModal = () => {
+        modalPanel.classList.add('scale-95', 'opacity-0');
+        modal.classList.add('opacity-0');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            form.reset();
+            imagePreviewContainer.classList.add('hidden');
+            currentImageContainer.classList.add('hidden');
+            form.setAttribute('action', '');
+        }, 300);
+    };
+
+    // Open modal for ADD
+    addBtn.addEventListener('click', () => {
+        form.reset();
+        modalTitle.textContent = 'Adicionar Novo Membro';
+        form.setAttribute('action', '{{ base_url }}/admin/atletica/create');
+        currentImageContainer.classList.add('hidden');
+        imagePreviewContainer.classList.add('hidden');
+        openModal();
+    });
+
+    // Open modal for EDIT
+    editBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            form.reset();
+            const id = btn.dataset.id;
+            modalTitle.textContent = 'Editar Membro';
+            form.setAttribute('action', `{{ base_url }}/admin/atletica/edit/${id}`);
+            
+            // Populate form fields
+            memberIdInput.value = id;
+            nomeInput.value = btn.dataset.nome;
+            cargoInput.value = btn.dataset.cargo;
+            instagramInput.value = btn.dataset.instagramUrl;
+            
+            // Handle image display
+            imagePreviewContainer.classList.add('hidden');
+            if (btn.dataset.foto) {
+                currentImage.src = btn.dataset.foto;
+                currentImageContainer.classList.remove('hidden');
+            } else {
+                currentImageContainer.classList.add('hidden');
+            }
+            openModal();
+        });
+    });
+
+    // Close modal listeners
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+
+    // Image preview logic
+    imageInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                imagePreview.src = event.target.result;
+                // Show new image preview and hide current image container
+                imagePreviewContainer.classList.remove('hidden');
+                currentImageContainer.classList.add('hidden'); 
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+});
+</script>
+{% endblock %}

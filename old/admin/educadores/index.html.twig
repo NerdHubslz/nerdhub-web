@@ -1,0 +1,85 @@
+{% extends "templates/admin/base.html.twig" %} {# Assumindo um template base para admin #}
+
+{% block title %}Admin - Gerenciar Educadores{% endblock %}
+
+{% block content %}
+    <main class="flex-1 p-6 ">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Gerenciar Educadores</h2>
+            <a href="{{ base_url }}/admin/educadores/create" id="addEducatorBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                + Adicionar Educador
+            </a>
+        </div>
+
+        {# Mensagens Flash #}
+        {% if flash %}
+            <div class="p-3 mb-4 text-sm {% if 'sucesso' in flash %}bg-green-100 text-green-700{% else %}bg-red-100 text-red-700{% endif %} rounded-lg" role="alert">
+                {{ flash }}
+            </div>
+        {% endif %}
+
+        {# Formulário de Busca #}
+        <div class="mb-6">
+            <form action="{{ base_url }}/admin/educadores" method="GET" class="flex items-center gap-4">
+                <input type="text" name="search" placeholder="Buscar por nome, email, cargo..."
+                       class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                       value="{{ searchTerm }}">
+                <button type="submit" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">Buscar</button>
+                {% if searchTerm %}<a href="{{ base_url }}/admin/educadores" class="text-blue-600 hover:underline">Limpar</a>{% endif %}
+            </form>
+        </div>
+
+        <div class="bg-white shadow-md rounded-lg overflow-x-auto flex-grow grow">
+            <table class="w-full text-left">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="p-4">ID</th>
+                        <th class="p-4">Nome Completo</th>
+                        <th class="p-4">E-mail</th>
+                        <th class="p-4">Cargo</th>
+                        <th class="p-4">É Admin?</th>
+                        <th class="p-4">Data de Cadastro</th>
+                        <th class="p-4">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if educadores is empty %}
+                        <tr>
+                            <td colspan="7" class="p-4 text-center text-gray-500">Nenhum educador encontrado.</td>
+                        </tr>
+                    {% else %}
+                        {% for item in educadores %}
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="p-4">{{ item.usuario.id }}</td>
+                                <td class="p-4">{{ item.perfil.nome }} {{ item.perfil.sobrenome }}</td>
+                                <td class="p-4">{{ item.usuario.email }}</td>
+                                <td class="p-4">{{ item.perfil.cargo }}</td>
+                                <td class="p-4">{{ item.usuario.isAdmin ? 'Sim' : 'Não' }}</td>
+                                <td class="p-4">{{ item.usuario.dataCadastro|date("d/m/Y") }}</td>
+                                <td class="p-4 flex space-x-2">
+                                    <a href="{{ base_url }}/admin/educadores/edit/{{ item.usuario.id }}" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">
+                                        Editar
+                                    </a>
+                                    <a href="{{ base_url }}/admin/educadores/delete/{{ item.usuario.id }}" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                                        Deletar
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        {# Paginação #}
+        <div class="flex justify-center mt-8">
+            {% for page in pagination %}
+                <a href="{{ base_url }}/admin/educadores?page={{ page.page }}&search={{ searchTerm }}"
+                   class="px-4 py-2 mx-1 rounded-md {% if page.current %}bg-blue-600 text-white{% else %}bg-gray-200 text-gray-700 hover:bg-gray-300{% endif %}">
+                    {{ page.page }}
+                </a>
+            {% endfor %}
+        </div>
+
+    </main>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-6">{{ title }}</h1>
+
+    <form action="{{ action }}" method="POST" enctype="multipart/form-data">
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+            <div>
+                <label for="nome" class="block text-sm font-medium text-gray-700">Nome do Projeto</label>
+                <input type="text" name="nome" id="nome" value="{{ projeto.getNome() }}" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+            </div>
+            <div>
+                <label for="periodo" class="block text-sm font-medium text-gray-700">Período</label>
+                <input type="text" name="periodo" id="periodo" value="{{ projeto.getPeriodo() }}" placeholder="Ex: 2025.1" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+            </div>
+            <div>
+                <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                <select name="status" id="status" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                    <option value="Planejado" {% if projeto.getStatus() == 'Planejado' %}selected{% endif %}>Planejado</option>
+                    <option value="Em Andamento" {% if projeto.getStatus() == 'Em Andamento' %}selected{% endif %}>Em Andamento</option>
+                    <option value="Concluído" {% if projeto.getStatus() == 'Concluído' %}selected{% endif %}>Concluído</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label for="descricao" class="block text-sm font-medium text-gray-700">Descrição</label>
+            <textarea name="descricao" id="descricao" rows="5" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">{{ projeto.getDescricao() }}</textarea>
+        </div>
+        <div class="mb-4">
+            <label for="github_url" class="block text-sm font-medium text-gray-700">Link do GitHub</label>
+            <input type="text" name="github_url" id="github_url" value="{{ projeto.getGithubUrl() }}" placeholder="https://github.com/usuario/repositorio" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+        </div>
+
+        <div class="mb-4">
+            <label for="imagem" class="block text-sm font-medium text-gray-700">Imagem do Projeto</label>
+            <input type="file" name="imagem" id="imagem" class="mt-1 block">
+            {% if projeto.getImagemPath() %}
+                <small class="text-gray-500">Imagem atual: <img src="{{ base_url }}/{{ projeto.getImagemPath() }}" class="w-20 h-auto mt-2"></small>
+            {% endif %}
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700">Tecnologias (Stacks)</label>
+            <div class="mt-2 grid grid-cols-2 md:grid-cols-4 gap-4">
+                {% for tecnologia in todas_tecnologias %}
+                    <label class="flex items-center">
+                        <input type="checkbox" name="tecnologias[]" value="{{ tecnologia.getId() }}"
+                            {% if tecnologia.getId() in projeto_tecnologias_ids %}checked{% endif %}
+                            class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                        <span class="ml-2">{{ tecnologia.getNome() }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <label for="participantes" class="block text-sm font-medium text-gray-700">Participantes</label>
+            <select name="participantes[]" id="participantes" multiple class="mt-1 block w-full h-40 px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                {% for usuario in todos_usuarios %}
+                    <option value="{{ usuario.getId() }}"
+                        {% if usuario.getId() in projeto_participantes_ids %}selected{% endif %}>
+                        {{ usuario.getUsername() }}
+                    </option>
+                {% endfor %}
+            </select>
+            <small class="text-gray-500">Segure Ctrl (ou Cmd no Mac) para selecionar múltiplos participantes.</small>
+        </div>
+        
+        <div class="flex justify-end mt-6">
+            <a href="{{ base_url }}/admin/ltd" class="mr-3 px-4 py-2 bg-gray-200 rounded-md">Cancelar</a>
+            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                {{ button_label }}
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

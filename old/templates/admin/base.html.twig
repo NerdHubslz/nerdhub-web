@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Painel Admin{% endblock %} - NerdHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+    <link rel="shortcut icon" type="image/jpg" href="{{base_url}}/{{assets}}/img/logos/logo.png"/>
+    
+    {# Bloco para CSS e outros links no head #}
+    {% block head %}{% endblock %}
+</head>
+
+<body class="font-['Pixelify_Sans'] bg-gray-100">
+    <div class="flex min-h-screen">
+        <!-- Barra Lateral -->
+        <aside class="w-64 bg-[#012145] text-white p-6 shadow-md hidden md:block">
+            <div class="mb-8">
+                <a href="{{ base_url }}/admin" class="text-2xl font-bold">NerdHub Admin</a>
+            </div>
+            <nav class="space-y-4">
+                <a href="{{ base_url }}/admin" class="block text-lg hover:text-xl hover:underline duration-300">home</a>
+                <a href="{{ base_url }}/admin/noticias" class="block text-lg hover:text-xl hover:underline duration-300">Notícias</a>
+                <a href="#" class="block text-lg hover:text-xl hover:underline duration-300">Usuários</a>
+                <a href="#" class="block text-lg hover:text-xl hover:underline duration-300">Categorias</a>
+                <a href="{{ base_url }}/admin/educadores" class="block text-lg hover:text-xl hover:underline duration-300">Educadores</a>
+                <a href="{{ base_url }}/admin/atletica" class="block text-lg hover:text-xl hover:underline duration-300">Atlética</a>
+                <a href="{{ base_url }}/" class="block text-lg hover:text-xl hover:underline duration-300 
+                pt-8">Voltar ao Site</a>
+                <a href="{{ base_url }}/admin/ltd" class="block text-lg hover:text-xl hover:underline duration-300">Projetos LTD</a>
+                
+            </nav>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <div class="flex-1 flex flex-col">
+            <header class="bg-white shadow-sm p-4 md:hidden">
+                <button id="menu-btn" class="text-gray-600 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+            </header>
+            <main class="flex-1 p-6 lg:p-10">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+
+    {# CORREÇÃO: O bloco de scripts está agora ANTES de fechar o </body> #}
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,79 @@
+{% extends "templates/base.html.twig" %}
+{% set config = {
+    'bg' : '#DB2777',
+    'title_color' : '#FFFFFF',
+    'description_color' : '#FFFFFF',
+    'text_color' : '#FFFFFF',
+    'hover_color' : '#DB2777',
+    
+    'logo' : 'logo-pink.png',
+}%}
+
+{% set cards = [
+    {
+        'img' : assets ~ '/img/podpink/jhenefer-2.jpg',
+        'nome' : 'Jhenefer Amorim',
+        'cargo' : 'Host',
+        'descricao' : 'Estudante do curso Ciência da Computação pela Universidade Estácio de Sá, é uma entusiasta da tecnologia e da visibilidade feminina no setor de TI. Ela é a voz por trás do PodPink, um podcast que visa valorizar e ampliar a visibilidade feminina no mercado de tecnologia.',
+        'redes': {
+            'instagram': 'https://www.instagram.com/jhenefersilvaamorim/',
+            'linkedin': 'https://www.linkedin.com/in/jhenefer-silva-amorim-7212171a8/',
+            'github': 'https://github.com/jhnefer'
+        }
+    },
+
+    {
+        'img' : assets ~ '/img/podpink/alynne.jpg',
+        'nome' : 'Alynne Porto',
+        'cargo' : 'Co-host',
+        'descricao' : 'Une seus estudos em Ciência da Computação na Estácio com a vontade de aumentar a presença feminina na tecnologia. Ela é uma das mentes por trás do PodPink,ajudando a incentivar e dar mais visibilidade para mulheres  no mercado.',
+        'redes': {
+            'instagram': 'https://www.instagram.com/alynneporto11/',
+            'linkedin': 'https://www.linkedin.com/in/alynne-porto-58b53723b?utm/',
+            'github': 'https://github.com/alynneP'
+        }
+    }
+]
+%}
+
+{% block title %}
+	PodPink 🎙️
+{% endblock %}
+
+{% block content %}
+
+	{% include "templates/partials/_card_resumo.html.twig" with {'card': {
+'title': 'PodPink',
+    'description': 'O PodPink é um podcast que visa valorizar e ampliar a visibilidade feminina no mercado de tecnologia.',
+    'img': assets ~ '/img/logos/podpink.png',
+    
+},
+'config': config
+
+} %}
+	{% for card in cards %}
+		{% include "templates/partials/_card_cargo.html.twig" with {'card': card} %}
+	{% endfor %}
+
+	<article class="max-w-5xl mx-auto bg-white border border-pink-200 rounded-xl shadow-lg p-6 mt-10 transition-all duration-300 hover:shadow-xl hover:bg-pink-50">
+		<div class="flex flex-col md:flex-row items-center gap-6">
+			<div class="flex-shrink-0">
+				<img class="w-60 h-60 object-cover rounded-lg" src="{{ assets }}/img/logos/youtube-podpink-logo.png" alt="YouTube PodPink">
+			</div>
+
+			<div class="flex flex-col gap-3 text-center md:text-left">
+				<h3 class="text-2xl font-bold text-pink-600">Todos os episódios no YouTube!</h3>
+				<p class="text-gray-700 text-base">Acompanhe nossa jornada completa! Inscreva-se em nosso canal e tenha acesso a todos os episódios, bastidores e conteúdos exclusivos do PodPink.</p>
+				<div class="mt-4">
+					<a href="https://youtube.com/@PodPink" target="_blank" class="inline-flex items-center px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white font-medium rounded-lg transition-colors duration-300">
+						<svg class="w-5 h-5 mr-2" fill="currentColor" viewbox="0 0 24 24" aria-hidden="true">
+							<path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+						</svg>
+						Inscreva-se no Canal
+					</a>
+				</div>
+			</div>
+		</div>
+	</article>
+
+{% endblock %}

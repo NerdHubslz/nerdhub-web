@@ -1,0 +1,13 @@
+<a href="{{ card.link }}" class="no-underline text-black hover:text-black">
+    <div class="bg-white border rounded-md border-[#d9d9d9] p-6 mt-3 shadow-md flex flex-col md:flex-row items-center gap-6 hover:bg-[#d9d9d9] hover:shadow-[inset_0_4px_6px_rgba(0,0,0,0.1)] transform hover:scale-[1.02] transition-all duration-700 ease-in-out">
+            <h1 class="text-xl font-semibold">{{card.title}}</h1>
+            {% if card.subtitle %}
+            <p class="italic mb-4">{{card.subtitle}}</p>
+            {% endif %}
+    
+            <p class="mb-2">
+                {{card.description}}
+            </p>
+        </div>
+    </div>
+</a>
