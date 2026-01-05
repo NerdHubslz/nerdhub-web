@@ -1,37 +1,33 @@
 <?php
 
-namespace App\Filament\Resources\News;
+namespace App\Filament\Admin\Resources\News;
 
-use App\Filament\Resources\News\Pages\CreateNews;
-use App\Filament\Resources\News\Pages\EditNews;
-use App\Filament\Resources\News\Pages\ListNews;
-use App\Filament\Resources\News\Pages\ViewNews;
-use App\Filament\Resources\News\Schemas\NewsForm;
-use App\Filament\Resources\News\Schemas\NewsInfolist;
-use App\Filament\Resources\News\Tables\NewsTable;
+use App\Filament\Admin\Resources\News\Pages\CreateNews;
+use App\Filament\Admin\Resources\News\Pages\EditNews;
+use App\Filament\Admin\Resources\News\Pages\ListNews;
+use App\Filament\Admin\Resources\News\Schemas\NewsForm;
+use App\Filament\Admin\Resources\News\Tables\NewsTable;
 use App\Models\News;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
 
 class NewsResource extends Resource
 {
     protected static ?string $model = News::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static ?string $modelLabel = "Notícia";
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedNewspaper;
 
     protected static ?string $recordTitleAttribute = 'Noticias';
 
     public static function form(Schema $schema): Schema
     {
         return NewsForm::configure($schema);
-    }
-
-    public static function infolist(Schema $schema): Schema
-    {
-        return NewsInfolist::configure($schema);
     }
 
     public static function table(Table $table): Table
@@ -51,8 +47,13 @@ class NewsResource extends Resource
         return [
             'index' => ListNews::route('/'),
             'create' => CreateNews::route('/create'),
-            'view' => ViewNews::route('/{record}'),
             'edit' => EditNews::route('/{record}/edit'),
         ];
     }
+    // protected function mutateFormDataBeforeCreate(array $data): array
+    // {
+    //     $data['slug'] = Str::slug($data['title']);
+    //     return $data;
+    // }
+
 }

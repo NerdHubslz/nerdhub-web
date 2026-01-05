@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('news', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->string('titulo');
-            $table->string('slug');
-            $table->text('conteudo');
-            $table->string('imagem_url')->nullable();
-            // store the author as user_id and add the foreign key constraint
-            $table->foreignId('autor')->constrained('users')->onDelete('cascade');
+            $table->string('name')->unique();
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('news');
+        Schema::dropIfExists('roles');
     }
 };

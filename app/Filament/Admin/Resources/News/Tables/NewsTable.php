@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Filament\Resources\News\Tables;
+namespace App\Filament\Admin\Resources\News\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
+use Filament\Schemas\Components\Image;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -16,13 +17,14 @@ class NewsTable
         return $table
             ->columns([
                 TextColumn::make('titulo')
-                    ->searchable(),
-                TextColumn::make('slug')
-                    ->searchable(),
-                TextColumn::make('imagem_url')
-                    ->searchable(),
-                TextColumn::make('autor')
-                    ->numeric()
+                    ->searchable()
+                    ->label('Título'),
+                ImageColumn::make('imagen_url')
+                    ->label('Imagem')
+                    ->imageHeight('80')
+                    ->imageWidth('120'),
+                
+                TextColumn::make('author.name')
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -37,7 +39,6 @@ class NewsTable
                 //
             ])
             ->recordActions([
-                ViewAction::make(),
                 EditAction::make(),
             ])
             ->toolbarActions([

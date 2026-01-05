@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\News\Pages;
+namespace App\Filament\Admin\Resources\News\Pages;
 
-use App\Filament\Resources\News\NewsResource;
+use App\Filament\Admin\Resources\News\NewsResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 

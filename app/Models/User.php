@@ -53,4 +53,9 @@ class User extends Authenticatable implements FilamentUser
     {
         return true;
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
 }
