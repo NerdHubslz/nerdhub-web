@@ -5,8 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use League\CommonMark\CommonMarkConverter;
-use League\CommonMark\Exception\CommonMarkException;
 
 class News extends Model
 {
@@ -33,16 +31,7 @@ class News extends Model
      */
     public function getHtmlContentAttribute(): string
     {
-        try {
-            $converter = new CommonMarkConverter([
-                'html_input' => 'strip',
-                'allow_unsafe_links' => false,
-            ]);
-            return $converter->convert($this->conteudo ?? '')->getContent();
-        } catch (CommonMarkException $e) {
-            // Handle parsing error, maybe return plain text or an error message
-            return 'Error parsing Markdown: ' . $e->getMessage();
-        }
+        return $this->conteudo ?? '';
     }
 
     /**
@@ -52,8 +41,7 @@ class News extends Model
      */
     public function getExcerptAttribute(): string
     {
-        // Use the existing html_content accessor to avoid parsing twice
-        $plainText = strip_tags($this->html_content);
+        $plainText = strip_tags($this->conteudo ?? '');
 
         return \Illuminate\Support\Str::limit($plainText, 150);
     }

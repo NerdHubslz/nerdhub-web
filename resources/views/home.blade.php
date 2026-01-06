@@ -2,7 +2,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <section class="flex justify-center mb-10">
-                    <img src="{{ asset('img/banner.png') }}" alt="Banner Principal" class="size-[65%] object-cover " />
+                    <img src="{{ asset('images/banner.png') }}" alt="Banner Principal" class="size-[65%] object-cover " />
                 </section>
 
                 <!-- Sobre o nerdhub -->
@@ -60,64 +60,38 @@
                 <!-- Notícias -->
                 <section>
                     <h1
-                        class="text-[2.5rem] font-extralight max-sm:text-3xl max-md:text-3xl max-sm:text-center underline text-center mb-10">
+                        class="text-[2.5rem] text-green-900 dark:text-gray-100 font-extralight max-sm:text-3xl max-md:text-3xl max-sm:text-center underline text-center mb-10">
                         Noticias</h1>
 
-                    <!-- Notícia Principal -->
-                   
-                    <article
-                        class="bg-white rounded-lg shadow-lg overflow-hidden mb-12 hover:shadow-2xl transition-shadow flex flex-col md:flex-row">
-                        <img src="https://source.unsplash.com/800x450/?breaking-news" alt="Notícia Principal"
-                            class="w-full md:w-1/2 h-128 md:h-auto object-cover" />
-                        <div class="p-6 flex flex-col justify-center md:w-1/2">
-                            <h3 class="text-3xl font-extrabold mb-4">opa
-                            </h3>
-                            <p class="text-gray-700 mb-6">
-                                Um resumo mais detalhado da notícia principal para atrair a atenção do leitor e destacar
-                                o conteúdo mais importante.:
-                            </p>
+                    @if($news->isNotEmpty())
+                        @php
+                            $mainNews = $news->first();
+                            $otherNews = $news->skip(1);
+                        @endphp
+
+                        <!-- Notícia Principal -->
+                        <article
+                            class="bg-white rounded-lg shadow-lg overflow-hidden mb-12 hover:shadow-2xl transition-shadow flex flex-col md:flex-row">
+                            <img src="{{ str_starts_with($mainNews->imagem_url, 'http') ? $mainNews->imagem_url : Storage::url($mainNews->imagem_url) }}" alt="{{ $mainNews->titulo }}"
+                                class="w-full md:w-1/2 h-128 md:h-auto object-cover" />
+                            <div class="p-6 flex flex-col justify-center md:w-1/2">
+                                <h3 class="text-3xl font-extrabold mb-4">{{ $mainNews->titulo }}</h3>
+                                <p class="text-gray-700 mb-6">
+                                    {{ $mainNews->excerpt }}
+                                </p>
+                                <a href="{{ route('news.show', $mainNews) }}" class="text-blue-600 hover:underline mt-3 inline-block font-bold text-lg">Leia mais &rarr;</a>
+                            </div>
+                        </article>
+
+                        <!-- Noticias menores -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            @foreach($otherNews as $item)
+                                <x-nerdhub.card-news :news="$item" />
+                            @endforeach
                         </div>
-                    </article>
-
-                    <!-- Noticias menores -->
-                    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-
-                        <article
-                            class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow">
-                            <img src="https://source.unsplash.com/400x250/?news" alt="Notícia 1"
-                                class="w-full h-48 object-cover" />
-                            <div class="p-4">
-                                <h3 class="text-xl font-bold mb-2">Título da Notícia 1</h3>
-                                <p class="text-gray-600">Resumo curto da notícia para dar uma ideia do conteúdo e
-                                    despertar o interesse do leitor.</p>
-                                <a href="#" class="text-blue-600 hover:underline mt-3 inline-block">Leia mais</a>
-                            </div>
-                        </article>
-
-                        <article
-                            class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow">
-                            <img src="https://source.unsplash.com/400x250/?technology" alt="Notícia 2"
-                                class="w-full h-48 object-cover" />
-                            <div class="p-4">
-                                <h3 class="text-xl font-bold mb-2">Título da Notícia 2</h3>
-                                <p class="text-gray-600">Um resumo interessante e breve para a notícia de tecnologia que
-                                    está em alta.</p>
-                                <a href="#" class="text-blue-600 hover:underline mt-3 inline-block">Leia mais</a>
-                            </div>
-                        </article>
-
-                        <article
-                            class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow">
-                            <img src="https://source.unsplash.com/400x250/?sports" alt="Notícia 3"
-                                class="w-full h-48 object-cover" />
-                            <div class="p-4">
-                                <h3 class="text-xl font-bold mb-2">Título da Notícia 3</h3>
-                                <p class="text-gray-600">Resumo da notícia esportiva que está chamando a atenção dos fãs
-                                    ao redor do mundo.</p>
-                                <a href="#" class="text-blue-600 hover:underline mt-3 inline-block">Leia mais</a>
-                            </div>
-                        </article>
-                    </div>
+                    @else
+                        <p class="text-center text-gray-500">Nenhuma notícia encontrada.</p>
+                    @endif
                 </section>
         </div>
     </div>

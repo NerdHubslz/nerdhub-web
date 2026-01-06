@@ -2,7 +2,7 @@
 
 <div {{ $attributes->merge(['class' => 'bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition duration-300 dark:bg-gray-800 flex flex-col']) }}>
     <div class="relative">
-        <img src="{{ $news->imagem_url }}" alt="Imagem da Notícia" class="w-full object-cover {{ $featured ? 'h-96' : 'h-48' }}">
+        <img src="{{ str_starts_with($news->imagem_url, 'http') ? $news->imagem_url : Storage::url($news->imagem_url) }}" alt="Imagem da Notícia" class="w-full object-cover {{ $featured ? 'h-96' : 'h-48' }}">
     </div>
     <div class="p-6 flex flex-col flex-grow">
         <h2 class="font-bold text-xl mb-2 text-gray-800 dark:text-gray-50">{{ $news->titulo }}</h2>
