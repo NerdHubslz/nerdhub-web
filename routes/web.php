@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -11,6 +12,9 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // paginas relacionadas a noticias
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
 Route::get('/news/{news:slug}', [NewsController::class, 'show'])->name('news.show');
+
+Route::get('/ltd', [ProjectController::class, 'index'])->name('ltd');
+Route::get('/ltd/{project}', [ProjectController::class, 'show'])->name('ltd.show');
 
 //todo adicionar midware de auth
 Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

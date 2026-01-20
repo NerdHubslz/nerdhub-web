@@ -12,25 +12,16 @@
             </div>
 
             <!-- Navigation Links -->
-
             <div class="hidden sm:flex gap-4">
                 <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
-                    {{ __('home') }}
+                    {{ __('Home') }}
                 </x-nav-link>
                 <x-nav-link :href="route('news.index')" :active="request()->routeIs('news.index')">
-                    {{ __('Noticias') }}
+                    {{ __('Notícias') }}
                 </x-nav-link>
-                <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
-                    {{ __('home') }}
+                <x-nav-link :href="route('ltd')" :active="request()->routeIs('ltd')">
+                    {{ __('LTD') }}
                 </x-nav-link>
-                <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
-                    {{ __('home') }}
-                </x-nav-link>
-                <x-nav-link :href="route('home')" :active="request()->routeIs('home')">
-                    {{ __('home') }}
-                </x-nav-link>
-
-
             </div>
 
             <!-- Settings Dropdown -->

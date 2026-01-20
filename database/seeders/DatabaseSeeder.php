@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(
             [NewsSeeder::class,
             RoleSeeder::class,
+            ProjectSeeder::class,
             ]
         );
     }

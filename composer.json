@@ -18,7 +18,7 @@
         "laravel/breeze": "^2.3",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.24",
-        "laravel/sail": "^1.41",
+        "laravel/sail": "^1.52",
         "laravel/telescope": "^5.16",
         "lucascudo/laravel-pt-br-localization": "^3.0",
         "mockery/mockery": "^1.6",

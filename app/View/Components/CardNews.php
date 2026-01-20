@@ -25,6 +25,6 @@ class CardNews extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.card-news');
+        return view('components.nerdhub.card-news');
     }
 }
