@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             [NewsSeeder::class,
             RoleSeeder::class,
             ProjectSeeder::class,
+            EducatorSeeder::class,
             ]
         );
     }

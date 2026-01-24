@@ -1,61 +1,263 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🚀 NerdHub Web
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Portal web desenvolvido para gerenciamento de projetos, notícias e sistema de usuários. Sistema construído com Laravel 12, Filament 4 e TailwindCSS.
 
-## About Laravel
+## 📋 Sobre o Projeto
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+O **NerdHub Web** é uma plataforma robusta desenvolvida para facilitar o gerenciamento de projetos e notícias. O sistema oferece uma interface moderna e intuitiva através do painel administrativo Filament.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Funcionalidades Principais
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- 🔐 **Autenticação e Autorização**: Sistema completo de usuários com diferentes níveis de permissão (Roles)
+- 📰 **Gerenciamento de Notícias**: Publicação e gestão de notícias e atualizações
+- 📦 **Gestão de Projetos**: Controle completo de projetos e suas informações
+- � **Perfis de Usuários**: Gerenciamento de perfis com bio, cargo, avatar e informações adicionais
+- 🎨 **Painel Administrativo**: Interface moderna e responsiva com Filament 4
 
-## Learning Laravel
+## 🛠️ Stack Tecnológica
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Backend
+- **PHP**: ^8.2
+- **Laravel**: ^12.0
+- **Filament**: ^4.0
+- **SQLite**: Banco de dados (padrão para desenvolvimento)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Frontend
+- **AlpineJS**: ^3.4.2
+- **TailwindCSS**: ^3.1.0
+- **Vite**: ^7.0.7
+- **Axios**: ^1.11.0
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Ferramentas de Desenvolvimento
+- **Laravel Breeze**: Autenticação
+- **Laravel Telescope**: Debug e monitoramento
+- **Laravel Debugbar**: Debug de desenvolvimento
+- **Pest**: Framework de testes
+- **Laravel Pint**: Code style fixer
 
-## Laravel Sponsors
+## 📦 Pré-requisitos
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Antes de começar, certifique-se de ter os seguintes requisitos instalados:
 
-### Premium Partners
+- PHP >= 8.2
+- Composer
+- Node.js >= 18.x
+- NPM ou Yarn
+- SQLite (ou outro banco de dados de sua preferência)
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## 🚀 Instalação
 
-## Contributing
+### 1. Clone o repositório
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+git clone <url-do-repositorio>
+cd nerdhub-web
+```
 
-## Code of Conduct
+### 2. Instalação Rápida (Recomendado)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+O projeto possui um script de setup automatizado:
 
-## Security Vulnerabilities
+```bash
+composer setup
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Este comando irá:
+- Instalar dependências PHP
+- Copiar arquivo `.env.example` para `.env`
+- Gerar chave da aplicação
+- Executar migrations
+- Instalar dependências Node.js
+- Compilar assets
 
-## License
+### 3. Instalação Manual
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Se preferir realizar a instalação passo a passo:
+
+```bash
+# Instalar dependências PHP
+composer install
+
+# Copiar arquivo de ambiente
+cp .env.example .env
+
+# Gerar chave da aplicação
+php artisan key:generate
+
+# Executar migrations
+php artisan migrate
+
+# Instalar dependências Node.js
+npm install
+
+# Compilar assets
+npm run build
+```
+
+### 4. Configuração do Banco de Dados
+
+Por padrão, o projeto utiliza SQLite. Se desejar usar outro banco de dados, edite o arquivo `.env`:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nerdhub
+DB_USERNAME=seu_usuario
+DB_PASSWORD=sua_senha
+```
+
+### 5. Seeders (Opcional)
+
+Para popular o banco de dados com dados iniciais:
+
+```bash
+php artisan db:seed
+```
+
+## 🏃 Executando o Projeto
+
+### Modo de Desenvolvimento (Recomendado)
+
+O projeto possui um comando unificado que inicia todos os serviços necessários:
+
+```bash
+composer dev
+```
+
+Este comando irá iniciar simultaneamente:
+- 🌐 Servidor Laravel (http://localhost:8000)
+- 🔄 Worker de filas
+- 📊 Laravel Pail (logs em tempo real)
+- ⚡ Vite (hot reload para assets)
+
+### Modo Manual
+
+Se preferir executar os serviços separadamente:
+
+```bash
+# Terminal 1 - Servidor Laravel
+php artisan serve
+
+# Terminal 2 - Vite (desenvolvimento de assets)
+npm run dev
+
+# Terminal 3 - Worker de filas (opcional)
+php artisan queue:listen
+
+# Terminal 4 - Logs em tempo real (opcional)
+php artisan pail
+```
+
+### Compilação para Produção
+
+```bash
+npm run build
+```
+
+## 🧪 Testes
+
+O projeto utiliza Pest para testes automatizados:
+
+```bash
+# Executar todos os testes
+composer test
+
+# Ou diretamente com artisan
+php artisan test
+
+# Executar testes com coverage
+php artisan test --coverage
+```
+
+## 📁 Estrutura do Projeto
+
+```
+nerdhub-web/
+├── app/
+│   ├── Filament/          # Recursos do Filament (Admin Panel)
+│   ├── Http/              # Controllers, Middleware, Requests
+│   ├── Models/            # Models Eloquent
+│   │   ├── News.php
+│   │   ├── Project.php
+│   │   ├── Role.php
+│   │   └── User.php
+│   ├── Providers/         # Service Providers
+│   └── View/              # View Composers
+├── database/
+│   ├── factories/         # Model Factories
+│   ├── migrations/        # Migrations do banco de dados
+│   └── seeders/           # Database Seeders
+├── public/                # Assets públicos
+├── resources/
+│   ├── css/               # Arquivos CSS
+│   ├── js/                # Arquivos JavaScript
+│   └── views/             # Views Blade
+├── routes/
+│   ├── web.php            # Rotas web
+│   ├── api.php            # Rotas API
+│   └── console.php        # Comandos Artisan
+├── storage/               # Arquivos gerados
+└── tests/                 # Testes automatizados
+```
+
+## 🔒 Acesso ao Painel Administrativo
+
+Após a instalação e execução do projeto, acesse o painel administrativo através de:
+
+```
+http://localhost:8000/admin
+```
+
+> **Nota**: Certifique-se de criar um usuário administrador através dos seeders ou manualmente no banco de dados.
+
+## 🌍 Localização
+
+O projeto está configurado para suportar localização em Português Brasileiro (pt-BR) através do pacote `lucascudo/laravel-pt-br-localization`.
+
+Para ativar o idioma português, configure no `.env`:
+
+```env
+APP_LOCALE=pt_BR
+APP_FALLBACK_LOCALE=pt_BR
+```
+
+## 📝 Scripts Disponíveis
+
+O `composer.json` possui os seguintes scripts úteis:
+
+| Comando | Descrição |
+|---------|-----------|
+| `composer setup` | Instalação completa do projeto |
+| `composer dev` | Inicia ambiente de desenvolvimento completo |
+| `composer test` | Executa testes automatizados |
+
+## 🤝 Contribuindo
+
+1. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+2. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+3. Push para a branch (`git push origin feature/AmazingFeature`)
+4. Abra um Pull Request
+
+## 📖 Documentação Adicional
+
+- [Documentação do Laravel 12](https://laravel.com/docs/12.x)
+- [Documentação do Filament 4](https://filamentphp.com/docs/4.x)
+- [Documentação do TailwindCSS](https://tailwindcss.com/docs)
+- [Documentação do AlpineJS](https://alpinejs.dev)
+
+## 🐛 Reportar Bugs
+
+Encontrou um bug? Por favor, abra uma issue descrevendo:
+- Descrição clara do problema
+- Passos para reproduzir
+- Comportamento esperado vs. atual
+- Screenshots (se aplicável)
+
+## 📄 Licença
+
+Este projeto é proprietário e confidencial. Todos os direitos reservados.
+
+---
+
+**Desenvolvido com ❤️ pela equipe NerdHub**
