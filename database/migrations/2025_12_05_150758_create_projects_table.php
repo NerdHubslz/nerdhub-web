@@ -16,9 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->timestamps();
-            $table->string('status')->default('Em andamento');
             $table->string('client_type')->nullable(); // Curso, Empresa, etc.
-            $table->foreignId('user_id')->nullable()->index();
             $table->date('start_date')->nullable();
             $table->json('technologies')->nullable();
             $table->integer('progress')->default(0);

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Project extends Model
 {
@@ -12,13 +13,13 @@ class Project extends Model
     protected $fillable = [
         'name',
         'description',
+        'url',
+        'github_url',
         'status',
         'client_type',
-        'member_count',
         'start_date',
         'technologies',
         'progress',
-        'client_name',
         'image',
         'gallery',
         'documents',
@@ -26,8 +27,13 @@ class Project extends Model
 
     protected $casts = [
         'technologies' => 'array',
-        'start_date' => 'date',
         'gallery' => 'array',
         'documents' => 'array',
+        'start_date' => 'date',
     ];
+
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class);
+    }
 }
