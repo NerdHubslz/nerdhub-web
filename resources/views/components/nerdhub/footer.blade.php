@@ -1,6 +1,6 @@
 
         <footer
-            class=" w-full mx-auto  bg-gray-100 dark:bg-gray-800 text-white pt-10 pr-5 pb-10 pl-5 text-sm font-['Pixelify_Sans']">
+            class=" w-full mx-auto  bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-300 pt-10 pr-5 pb-10 pl-5 text-sm font-['Pixelify_Sans']">
             <div class="w-[75%] flex max-sm:block max-lg:block flex-wrap justify-between gap-[30px] mx-auto">
                 <section class="flex-1 basis-[200px] max-lg:py-5">
                     <h3 class="text-lg text-gray-900 dark:text-gray-100 max-lg:text-center max-lg:text-xl">Créditos</h4>
