@@ -22,6 +22,10 @@ Route::get('/ltd/{project}', [ProjectController::class, 'show'])->name('ltd.show
 
 Route::get('/educadores', [EducatorController::class, 'index'])->name('educators.index');
 
+Route::get('/podpink', function () {
+    return view('podpink');
+})->name('podpink');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
