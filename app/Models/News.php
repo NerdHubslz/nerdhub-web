@@ -17,11 +17,17 @@ class News extends Model
         'conteudo',
         'imagem_url',
         'autor',
+        'category_id',
     ];
 
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'autor');
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
 
     /**

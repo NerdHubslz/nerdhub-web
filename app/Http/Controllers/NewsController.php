@@ -5,17 +5,29 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreNewsRequest;
 use App\Http\Requests\UpdateNewsRequest;
 use App\Models\News;
+use App\Models\Category;
+use Illuminate\Http\Request;
 
 class NewsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $query = News::latest();
 
-        $news = News::latest()->paginate(10);
-        return view("news.index", compact('news'));
+        if ($request->has('category')) {
+            $category = Category::where('slug', $request->query('category'))->first();
+            if ($category) {
+                $query->where('category_id', $category->id);
+            }
+        }
+
+        $news = $query->paginate(10);
+        $categories = Category::withCount('news')->get();
+
+        return view("news.index", compact('news', 'categories'));
     }
 
     /**

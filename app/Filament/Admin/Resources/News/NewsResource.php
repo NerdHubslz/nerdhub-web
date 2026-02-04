@@ -13,17 +13,14 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use Illuminate\Support\Str;
 
 class NewsResource extends Resource
 {
     protected static ?string $model = News::class;
 
-    protected static ?string $modelLabel = "Notícia";
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedNewspaper;
-
-    protected static ?string $recordTitleAttribute = 'Noticias';
+    protected static ?string $navigationGroup = 'Notícias';
 
     public static function form(Schema $schema): Schema
     {
@@ -50,10 +47,4 @@ class NewsResource extends Resource
             'edit' => EditNews::route('/{record}/edit'),
         ];
     }
-    // protected function mutateFormDataBeforeCreate(array $data): array
-    // {
-    //     $data['slug'] = Str::slug($data['title']);
-    //     return $data;
-    // }
-
 }

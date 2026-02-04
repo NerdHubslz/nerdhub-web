@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('imagem_url')->nullable();
             // store the author as user_id and add the foreign key constraint
             $table->foreignId('autor')->constrained('users')->onDelete('cascade');
+            $table->foreignId('category_id')->nullable()->constrained('categories')->nullOnDelete();
             $table->timestamps();
         });
     }
