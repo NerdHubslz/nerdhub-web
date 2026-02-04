@@ -28,6 +28,9 @@
                 <x-nav-link :href="route('events.index')" :active="request()->routeIs('events.*')">
                     {{ __('Eventos') }}
                 </x-nav-link>
+                <x-nav-link :href="route('educators.index')" :active="request()->routeIs('educators.index')">
+                    {{ __('Educadores') }}
+                </x-nav-link>
             </div>
 
             <!-- Settings Dropdown -->
@@ -108,6 +111,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('events.index')" :active="request()->routeIs('events.*')">
                 {{ __('Eventos') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('educators.index')" :active="request()->routeIs('educators.index')">
+            {{ __('Educadores') }}
             </x-responsive-nav-link>
         </div>
 
