@@ -27,7 +27,7 @@
             </div>
             <div class="text-center mt-5 border-t border-[#444] pt-7">
                 <p class="text-gray-900 dark:text-gray-100 italic">©
-                    {{now() }}  {{-- todo adicionar  --}}
+                    {{now()->format('Y') }}  {{-- todo adicionar  --}}
                     - Todos os direitos reservados.</p>
             </div>
         </footer>

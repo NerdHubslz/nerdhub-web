@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\EducatorController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\PodpinkController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -22,9 +23,7 @@ Route::get('/ltd/{project}', [ProjectController::class, 'show'])->name('ltd.show
 
 Route::get('/educadores', [EducatorController::class, 'index'])->name('educators.index');
 
-Route::get('/podpink', function () {
-    return view('podpink');
-})->name('podpink');
+Route::get('/podpink', [PodpinkController::class, 'index'])->name('podpink');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

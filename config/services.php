@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'youtube' => [
+        'key' => env('YOUTUBE_API_KEY'),
+        'channel_id' => env('YOUTUBE_CHANNEL_ID', 'UC7IRhFKod3OZa521a1BkljQ'), // ID real do canal @Podpink
+    ],
+
 ];

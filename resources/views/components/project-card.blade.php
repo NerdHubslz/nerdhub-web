@@ -15,7 +15,7 @@
 
     $statusBg = $statusColors[$project->status] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
     $clientTypeBg = $clientTypeColors[$project->client_type] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300';
-@endphp
+    @endphp
 
 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col h-full border border-gray-100 dark:border-gray-700 hover:-translate-y-1 group p-6">
     <div class="flex items-start justify-between gap-4">
@@ -31,7 +31,7 @@
           <h3 class="text-lg font-semibold text-gray-800 dark:text-white truncate group-hover:text-brand-blue dark:group-hover:text-brand-green transition-colors">
             {{ $project->name }}
           </h3>
-          <p class="mt-1 text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+          <p class="mt-1 text-sm text-gray-600 dark:text-gray-400 line-clamp-2 break-words">
             {{ $project->description }}
           </p>
         </div>

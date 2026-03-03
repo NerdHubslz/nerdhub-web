@@ -22,12 +22,11 @@ class ProjectFactory extends Factory
         return [
             'name' => $this->faker->sentence(3),
             'description' => $this->faker->paragraph,
-            'status' => $this->faker->randomElement(['Em andamento', 'Concluído', 'Planejamento']),
             'client_type' => $this->faker->randomElement(['Curso', 'Empresa', 'Institucional']),
-            'member_count' => $this->faker->numberBetween(1, 10),
             'start_date' => $this->faker->date(),
             'technologies' => $this->faker->randomElements(['React', 'Laravel', 'Tailwind', 'Vue', 'Node.js', 'PostgreSQL'], 3),
             'progress' => $this->faker->numberBetween(0, 100),
+            'image' => 'https://picsum.photos/seed/' . $this->faker->uuid . '/800/600',
             'client_name' => $this->faker->company,
             'gallery' => [
                 'https://picsum.photos/seed/' . $this->faker->uuid . '/800/600',
