@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             ProjectSeeder::class,
             EducatorSeeder::class,
+            EventSeeder::class,
             ]
         );
     }

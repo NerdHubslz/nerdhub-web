@@ -21,10 +21,10 @@ return new class extends Migration
             $table->json('technologies')->nullable();
             $table->integer('progress')->default(0);
             $table->string('client_name')->nullable();
+            $table->string('status')->default('Em andamento');
             $table->string('image')->nullable();
             $table->json('gallery')->nullable();
             $table->json('documents')->nullable();
-            
         });
     }
 

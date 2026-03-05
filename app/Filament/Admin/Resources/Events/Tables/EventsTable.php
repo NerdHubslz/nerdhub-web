@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Events\Tables;
 
+use App\Models\Event;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -16,27 +17,30 @@ class EventsTable
         return $table
             ->columns([
                 TextColumn::make('title')
-                    ->searchable(),
-                TextColumn::make('slug')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable()
+                    ->label('Título'),
                 TextColumn::make('start_time')
-                    ->dateTime()
-                    ->sortable(),
+                    ->dateTime('d/m/Y H:i')
+                    ->sortable()
+                    ->label('Início'),
                 TextColumn::make('end_time')
-                    ->dateTime()
-                    ->sortable(),
-                TextColumn::make('location')
-                    ->searchable(),
-                ImageColumn::make('banner_image'),
-                TextColumn::make('registration_link')
-                    ->searchable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
+                    ->label('Término')
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
+                TextColumn::make('location')
+                    ->searchable()
+                    ->label('Local'),
+                ImageColumn::make('banner_image')
+                    ->label('Banner')
+                    ->square(),
+                TextColumn::make('registration_link')
+                    ->searchable()
+                    ->label('Url Inscrição')
+                    ->url(fn (Event $record) => $record->registration_link)
+                    ->openUrlInNewTab()
+                    ->copyable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([

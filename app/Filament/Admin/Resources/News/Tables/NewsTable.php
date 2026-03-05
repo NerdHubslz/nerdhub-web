@@ -16,19 +16,20 @@ class NewsTable
         return $table
             ->columns([
                 ImageColumn::make('imagem_url')
-                    ->label('Imagem'),
+                    ->label('Capa')
+                    ->square(),
                 TextColumn::make('titulo')
-                    ->searchable(),
-                TextColumn::make('slug')
+                    ->label('Título')
                     ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('author.name')
-                    ->label('Autor')
                     ->sortable(),
                 TextColumn::make('category.name')
                     ->label('Categoria')
                     ->badge()
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('author.name')
+                    ->label('Autor')
+                    ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

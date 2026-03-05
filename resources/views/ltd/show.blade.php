@@ -122,7 +122,7 @@
                                 <div x-show="activeTab === 'gallery'" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     @forelse($project->gallery ?? [] as $image)
                                         <div class="relative group rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                                            <img src="{{ $image }}" alt="Galeria do projeto" class="w-full h-48 object-cover transform group-hover:scale-105 transition-transform duration-300">
+                                            <img src="{{ asset('storage/' . $image) }}" alt="Galeria do projeto" class="w-full h-48 object-cover transform group-hover:scale-105 transition-transform duration-300">
                                             <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300"></div>
                                         </div>
                                     @empty
@@ -132,14 +132,14 @@
 
                                 <div x-show="activeTab === 'documents'" class="space-y-3">
                                     @forelse($project->documents ?? [] as $doc)
-                                        <a href="{{ $doc['url'] }}" class="block group">
+                                        <a href="{{ asset('storage/' . $doc) }}" target="_blank" class="block group">
                                             <div class="flex items-center p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm hover:shadow-md transition-shadow hover:border-brand-blue dark:hover:border-brand-green">
                                                 <div class="flex-shrink-0 p-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg">
                                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                                                 </div>
                                                 <div class="ml-4 flex-1">
-                                                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-brand-blue dark:group-hover:text-brand-green">{{ $doc['name'] }}</h4>
-                                                    <p class="text-xs text-gray-500 dark:text-gray-400">{{ $doc['size'] }}</p>
+                                                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-brand-blue dark:group-hover:text-brand-green">{{ basename($doc) }}</h4>
+                                                    <p class="text-xs text-gray-500 dark:text-gray-400">Documento anexado</p>
                                                 </div>
                                                 <div class="ml-4">
                                                     <svg class="w-5 h-5 text-gray-400 group-hover:text-brand-blue dark:group-hover:text-brand-green" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
